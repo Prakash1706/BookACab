@@ -59,11 +59,13 @@ public class BookACabApplication {
 //				
 //				TimeSlot slot1 = new TimeSlot(1, LocalTime.of(8, 30));
 //				TimeSlot slot2 = new TimeSlot(2, LocalTime.of(10, 30));
-//				TimeSlot slot3 = new TimeSlot(2, LocalTime.of(22, 30));
+//				TimeSlot slot3 = new TimeSlot(3, LocalTime.of(22, 30));
+//				TimeSlot slot4 = new TimeSlot(4, LocalTime.of(00, 30));
 //				List<TimeSlot> timeSlots = new ArrayList<>();
 //				timeSlots.add(slot1);
 //				timeSlots.add(slot2);
 //				timeSlots.add(slot3);
+//				timeSlots.add(slot4);
 //				
 //				Destination destination = new Destination(3, "Kelambakkam",dropPoints,timeSlots);
 //				this.destinationRepo.save(destination);

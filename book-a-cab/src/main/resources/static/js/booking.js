@@ -18,7 +18,7 @@
     	
     	var time;
     	
-    	setInterval('validateBooking()',10000); //for every 10000ms, validateBooking() gets invoked
+    	//setInterval('validateBooking()',10000); //for every 10000ms, validateBooking() gets invoked
     	
     	var validateXhr = new XMLHttpRequest();
         
@@ -402,7 +402,7 @@
 				seconds = splittedTimeSlot[2].split(" ");
 				//alert(Number(splittedTimeSlot[1]));
 				if(Number(splittedTimeSlot[0])+12==24){
-					bookingTimeSlot = "00"+":"+Number(splittedTimeSlot[1])+":"+seconds[0];
+					bookingTimeSlot = "12"+":"+Number(splittedTimeSlot[1])+":"+seconds[0];
 				}
 				else{
 					splittedTimeSlotHour = Number(splittedTimeSlot[0])+12;
@@ -412,7 +412,10 @@
 		  }
 		  else{
 				seconds = splittedTimeSlot[2].split(" ");
-				if(Number(splittedTimeSlot[0])<10){
+				if(Number(splittedTimeSlot[0])==12){
+					bookingTimeSlot = "00"+":"+Number(splittedTimeSlot[1])+":"+seconds[0];
+				}
+				else if(Number(splittedTimeSlot[0])<10){
 					bookingTimeSlot = "0"+Number(splittedTimeSlot[0]) +":"+Number(splittedTimeSlot[1])+":"+seconds[0];
 				}
 				else{

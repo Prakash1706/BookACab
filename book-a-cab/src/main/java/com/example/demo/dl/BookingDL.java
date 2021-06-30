@@ -40,6 +40,13 @@ public class BookingDL {
 		request.setBookingId(bookingRepo.count()+1);
 		request.setBookingTime(LocalTime.now());
 		
+		System.out.println(request.getBookingTime());
+		System.out.println(request.getBookingTime().plusMinutes(20));
+		System.out.println(request.getBookingTime().plusMinutes(20).isAfter(request.getTimeSlot()));
+		System.out.println(request.getTimeSlot());
+		System.out.println(request.getTimeSlot().minusMinutes(40));
+		
+			
 		if(request.getBookingTime().plusMinutes(20).isAfter(request.getTimeSlot())) {
 			
 			return null;
