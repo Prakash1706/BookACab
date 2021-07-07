@@ -5,18 +5,34 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 
 import com.example.demo.dl.BookingDL;
 import com.example.demo.entity.BookingRequest;
+import com.example.demo.entity.BookingRequestDTO;
 import com.example.demo.entity.Destination;
+import com.example.demo.entity.Email;
+import com.example.demo.entity.Employee;
 import com.example.demo.entity.Source;
+
 
 @Component
 public class BookingBL {
 	
 	@Autowired
 	private BookingDL bookingDl;
+	
+	@Autowired
+	private JavaMailSender mailSender;
+	
+	@Value("${spring.mail.username}")
+	String fromMail;
+	
+	Email email = new Email();
+
 	
 	//For getting Booking request
 	public List<BookingRequest> getBookingRequests()
@@ -25,9 +41,26 @@ public class BookingBL {
 	}
 	
 	//For storing incoming Booking Request
-	public BookingRequest storeBookingRequest(BookingRequest request) throws Exception
+	public BookingRequest storeBookingRequest(BookingRequestDTO request) throws Exception
 	{
 		BookingRequest bookingMade = this.bookingDl.storeBookingRequest(request);
+		
+		
+		if(bookingMade != null) {
+			
+			Employee employee = this.bookingDl.getEmployee(bookingMade.getEmployeeId());
+			
+			email.setFrom(fromMail);
+			email.setTo(employee.getEmployeeMail());
+			email.setSubject("Booking Confirmation");
+			email.setMessage("Hey! " +employee.getEmployeeName()+ "\n" + 
+	  					     " You've booked a cab \n" + 
+	  					     " From: " + bookingMade.getSource()+ "\n" + 
+	  					     " To: " +bookingMade.getDropPoint()+ "\n" + 
+	  					     " Time Slot: " +bookingMade.getTimeSlot()+ "\n" + 
+	  						 " at: " + bookingMade.getBookingTime());
+			sendEmail();
+		}
 		
 		 return bookingMade;
 	}
@@ -59,7 +92,24 @@ public class BookingBL {
 	//For Canceling the Ride
 	public BookingRequest cancelTheRide(long bookingId)
 	{
-		return this.bookingDl.cancelTheRide(bookingId);
+		BookingRequest bookingCancelled = this.bookingDl.cancelTheRide(bookingId);
+		
+		if(bookingCancelled != null) {
+			
+			Employee employee = this.bookingDl.getEmployee(bookingCancelled.getEmployeeId());
+			
+			email.setFrom(fromMail);
+			email.setTo(employee.getEmployeeMail());
+			email.setSubject("Booking Cancelled");
+			email.setMessage("Hey! " +employee.getEmployeeName()+ "\n" + 
+	  					     " You've cancelled your booking \n" + 
+	  					     " From: " + bookingCancelled.getSource()+ "\n" + 
+	  					     " To: " +bookingCancelled.getDropPoint()+ "\n" + 
+	  					     " Time Slot: " + bookingCancelled.getTimeSlot());
+			sendEmail();
+		}
+		
+		return bookingCancelled;
 		
 	}
 	
@@ -73,6 +123,19 @@ public class BookingBL {
 		
 		return this.bookingDl.validateBooking(employeeId);
 		
+	}
+	
+	//For sending confirmation email
+	public void sendEmail() {
+		
+		SimpleMailMessage message = new SimpleMailMessage();
+		
+		message.setFrom(email.getFrom());
+		message.setTo(email.getTo());
+		message.setSubject(email.getSubject());
+		message.setText(email.getMessage());
+		
+		mailSender.send(message);
 	}
 
 }

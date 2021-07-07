@@ -1,13 +1,8 @@
 package com.example.demo.entity;
 
-import java.beans.Transient;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Date;
-
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -19,11 +14,9 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Document(collection = "bookingRequest")
-public class BookingRequest {
-	
-	@Id
-	long bookingId;
+public class BookingRequestDTO {
+
+long bookingId;
 	
 	int employeeId;
 	String employeeName;
@@ -44,8 +37,6 @@ public class BookingRequest {
 	String modifiedBy;
 	LocalDate modifiedDate;
 	int isDeleted;
-	
-
-	
-
+	String slotDate;
+	String bookingDate;
 }

@@ -4,3 +4,18 @@ spring:
       host: localhost
       database: cabApplication
       port: 27017
+        mail:    host: smtp.office365.com
+    port: 587
+    
+    username: 
+    
+    password: 
+    
+    properties:      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            
+
+    

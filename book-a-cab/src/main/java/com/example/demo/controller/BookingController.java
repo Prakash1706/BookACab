@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.bl.BookingBL;
 import com.example.demo.entity.BookingRequest;
+import com.example.demo.entity.BookingRequestDTO;
 import com.example.demo.entity.Destination;
 import com.example.demo.entity.Source;
 import com.example.demo.repository.BookingRepository;
@@ -34,6 +36,7 @@ public class BookingController {
 	
 	@Autowired
 	private BookingBL bookingBl;
+
 	
 	//For getting Booking request
 	@GetMapping(path = "/bookings")
@@ -46,8 +49,9 @@ public class BookingController {
 
 	//For storing BookingRequest
 	@PostMapping(path = "/bookacab")
-	public ResponseEntity<BookingRequest> storeBookingrequest(@RequestBody BookingRequest request) throws Exception
+	public ResponseEntity<BookingRequest> storeBookingrequest(@RequestBody BookingRequestDTO request) throws Exception
 	{
+		//System.out.println(request);
 		BookingRequest savedRequest = this.bookingBl.storeBookingRequest(request);
 		
 		if(savedRequest == null) {
@@ -127,7 +131,7 @@ public class BookingController {
 	@GetMapping(path = "/time")
 	public String getBookingTime()
 	{
-		return LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+		return LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"))+" "+LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 		
 	}
 		

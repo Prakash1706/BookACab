@@ -13,8 +13,8 @@
         
         //Validate whether the User has already made booking or not
         
-        var empId = "2038";
-    	var empName = "Abishek";
+        var empId = "2034";
+    	var empName = "Prakash D";
     	
     	var time;
     	
@@ -212,6 +212,11 @@
         				
         			}
         			
+        			var curDate = new Date();
+        			var curHour = curDate.getHours();
+        			var curMin = curDate.getMinutes();
+        			var curSec = curDate.getSeconds();
+        			//alert(curHour);
         			for(var k=0; k<destinations[i].timeSlots.length; k++){
         				
         				//Binding options of TimeSlots
@@ -222,27 +227,46 @@
         				var slotSplitted = slot.split(":"); //[22,30,00]
         				slotHour = slotSplitted[0];
         				
+        				
+        			if(curHour<slotHour){	
+        			
         				if(slotHour<12){
-							if(slotHour==00){
-								timeSlotOption.innerHTML = "12"+":"+slotSplitted[1]+":"+slotSplitted[2]+" AM";
-							}
-							else{
-								timeSlotOption.innerHTML = slotHour+":"+slotSplitted[1]+":"+slotSplitted[2]+" AM";
-							}
+        					
+								if(slotHour==00){
+									timeSlotOption.innerHTML = "12"+":"+slotSplitted[1]+":"+slotSplitted[2]+" AM";
+								}
+								else{
+									timeSlotOption.innerHTML = slotHour+":"+slotSplitted[1]+":"+slotSplitted[2]+" AM";
+								}
 							
 						}
 						else{
-							slotHour = slotHour-12;
-							if(slotHour < 10){
-								timeSlotOption.innerHTML = "0"+slotHour+":"+slotSplitted[1]+":"+slotSplitted[2]+" PM";
-							}
-							else{
-								timeSlotOption.innerHTML = slotHour+":"+slotSplitted[1]+":"+slotSplitted[2]+" PM";
-							}
+								slotHour = slotHour-12;
+								if(slotHour==0){
+									timeSlotOption.innerHTML = "12"+":"+slotSplitted[1]+":"+slotSplitted[2]+" PM";
+								}
+								else if(slotHour < 10){
+									timeSlotOption.innerHTML = "0"+slotHour+":"+slotSplitted[1]+":"+slotSplitted[2]+" PM";
+								}
+								else{
+									timeSlotOption.innerHTML = slotHour+":"+slotSplitted[1]+":"+slotSplitted[2]+" PM";
+								}
 							
 						}
+						
         				
         				document.getElementById("timeSlot-opt").options.add(timeSlotOption);
+        				
+        			}
+        			else if(slotHour<12){
+        				if(slotHour==00){
+							timeSlotOption.innerHTML = "12"+":"+slotSplitted[1]+":"+slotSplitted[2]+" AM";
+						}
+						else{
+							timeSlotOption.innerHTML = slotHour+":"+slotSplitted[1]+":"+slotSplitted[2]+" AM";
+						}
+						document.getElementById("timeSlot-opt").options.add(timeSlotOption);
+        			}
         			}
         		}
         	} 
@@ -294,6 +318,15 @@
       var destinationSelected;
       var dropPointSelected;
       var timeSlotSelected
+      var currentDate;
+      
+       function addDays(date, days) {
+  			var result = new Date(date);
+  			result.setDate(result.getDate() + days);
+ 			 return result;
+			}
+			
+    	  var date = new Date();
       
       function bookARideButtonClicked(){
     	 
@@ -310,6 +343,7 @@
 	if(xhrTime.readyState == 4 && xhrTime.status == 200){
 		
 		time = xhrTime.responseText;
+		//alert(time);
 	}
 	}
     	  
@@ -320,19 +354,88 @@
     	  dropPointSelected = document.querySelector('#dropPoint-opt').value;
     	  timeSlotSelected = document.querySelector('#timeSlot-opt').value;
     	  
-    	  let date = new Date();
-    	  var currentDate;
-		  if(timeSlotSelected.includes("AM")){
-				currentDate = (date.getDate()+1) + "/" + (date.getMonth() + 1) + "/" +date.getFullYear();
+    	 
+    	 var bookingTimeDiv = document.createElement('div');
+    	  bookingTimeDiv.className = " col-md-12 col-12 float-start confirm-booking-content";
+    	  time = time.split(" ");
+    	  var timeSplit = time[0].split(":");
+    	  var hours = timeSplit[0];
+    	  
+    	   if (date.getDate() < 10) {
+			  slotDate = "0" + date.getDate();
 		  }
-		  else{
-			currentDate = date.getDate() + "/" + (date.getMonth() + 1) + "/" +date.getFullYear();
+		  else {
+			  slotDate = date.getDate();
+		  }
+		  if ((date.getMonth() + 1) < 10) {
+			  slotMonth = "0" + (date.getMonth())
+		  }
+		  else {
+			  slotMonth = (date.getMonth())
+		  }
+		  if (date.getHours() < 10) {
+			  slotHour = "0" + date.getHours();
+		  }
+		  else {
+			  slotHour = date.getHours();
 		  }
     	  
-    	  var bookingTimeDiv = document.createElement('div');
-    	  bookingTimeDiv.className = " col-md-12 col-12 float-start confirm-booking-content";
-    	  var timeSplit = time.split(":");
-    	  var hours = timeSplit[0];
+    	  
+		  if(timeSlotSelected.includes("AM")){
+//			if((Number(slotDate)+1)<10){
+//				currentDate = "0"+(Number(slotDate)+1) + "-" + slotMonth + "-" +date.getFullYear();
+//			}
+//			else{
+//				currentDate = (Number(slotDate)+1) + "-" + slotMonth + "-" +date.getFullYear();
+//			}
+			
+			var d = addDays(new Date(),1);
+			if((d.getDate()+1)<10){
+				if((d.getMonth()+1)<10){
+					currentDate = "0"+d.getDate() + "-" + "0"+(d.getMonth()+1) + "-" +d.getFullYear();
+				}
+				else{
+					currentDate = "0"+d.getDate() + "-" + (d.getMonth()+1) + "-" +d.getFullYear();
+				}
+				//currentDate = "0"+d.getDate() + "-" + (d.getMonth()+1) + "-" +d.getFullYear();
+
+			}
+			else{
+				//currentDate = d.getDate() + "-" + (d.getMonth()+1) + "-" +d.getFullYear();
+				if((d.getMonth()+1)<10){
+					currentDate = d.getDate() + "-" + "0"+(d.getMonth()+1) + "-" +d.getFullYear();
+				}
+				else{
+					currentDate = d.getDate() + "-" + (d.getMonth()+1) + "-" +d.getFullYear();
+				}
+			}
+				
+		  }
+		  else{
+			var pmDate = addDays(new Date(),0);
+			//currentDate = slotDate + "-" + slotMonth + "-" +date.getFullYear();
+			if(pmDate.getDate()<10){
+				if(pmDate.getMonth()<10){
+					currentDate = "0"+pmDate.getDate() + "-" + "0"+(pmDate.getMonth()+1) + "-" +pmDate.getFullYear();
+				}
+				else{
+					currentDate = "0"+pmDate.getDate() + "-" + (pmDate.getMonth()+1) + "-" +pmDate.getFullYear();
+				}
+				//currentDate = "0"+d.getDate() + "-" + (d.getMonth()+1) + "-" +d.getFullYear();
+
+			}
+			else{
+				//currentDate = d.getDate() + "-" + (d.getMonth()+1) + "-" +d.getFullYear();
+				if(pmDate.getMonth()<10){
+					currentDate = pmDate.getDate() + "-" + "0"+(pmDate.getMonth()+1) + "-" +pmDate.getFullYear();
+				}
+				else{
+					currentDate = pmDate.getDate() + "-" + (pmDate.getMonth()+1) + "-" +pmDate.getFullYear();
+				}
+			}
+		  }
+    	  
+    	  
     	  
     	  if(hours<12){
 				if(hours>=10){
@@ -398,35 +501,76 @@
       function okButtonClicked(){
     	  
     	  var splittedTimeSlot = timeSlotSelected.split(":");
+    	  minute = splittedTimeSlot[1];
+		
     	  if(splittedTimeSlot[2].includes("PM")){
 				seconds = splittedTimeSlot[2].split(" ");
 				//alert(Number(splittedTimeSlot[1]));
 				if(Number(splittedTimeSlot[0])+12==24){
-					bookingTimeSlot = "12"+":"+Number(splittedTimeSlot[1])+":"+seconds[0];
+					bookingTimeSlot = "12"+":"+minute+":"+seconds[0];
 				}
 				else{
 					splittedTimeSlotHour = Number(splittedTimeSlot[0])+12;
-					bookingTimeSlot = splittedTimeSlotHour +":"+Number(splittedTimeSlot[1])+":"+seconds[0];
+					bookingTimeSlot = splittedTimeSlotHour +":"+minute+":"+seconds[0];
 				}
 				
 		  }
 		  else{
 				seconds = splittedTimeSlot[2].split(" ");
 				if(Number(splittedTimeSlot[0])==12){
-					bookingTimeSlot = "00"+":"+Number(splittedTimeSlot[1])+":"+seconds[0];
+					bookingTimeSlot = "00"+":"+minute+":"+seconds[0];
 				}
 				else if(Number(splittedTimeSlot[0])<10){
-					bookingTimeSlot = "0"+Number(splittedTimeSlot[0]) +":"+Number(splittedTimeSlot[1])+":"+seconds[0];
+					bookingTimeSlot = "0"+Number(splittedTimeSlot[0]) +":"+minute+":"+seconds[0];
 				}
 				else{
-					bookingTimeSlot = Number(splittedTimeSlot[0]) +":"+Number(splittedTimeSlot[1])+":"+seconds[0];
+					bookingTimeSlot = Number(splittedTimeSlot[0]) +":"+minute+":"+seconds[0];
 				}
 				
 		  }
-		//alert(bookingTimeSlot);
+		
+		
+		//slotDate and bookingDate
+		
+		  //booking time
+		  var dateBook = new Date();
+		  if (dateBook.getDate() < 10) {
+			  curDate = "0" + dateBook.getDate();
+		  }
+		  else {
+			  curDate = dateBook.getDate();
+		  }
+		  if ((dateBook.getMonth() + 1) < 10) {
+			  curMonth = "0" + (dateBook.getMonth() + 1)
+		  }
+		  else {
+			  curMonth = (dateBook.getMonth() + 1)
+		  }
+		  if (dateBook.getHours() < 10) {
+			  bookHour = "0" + dateBook.getHours();
+		  }
+		  else {
+			  bookHour = dateBook.getHours();
+		  }
+		  if (dateBook.getMinutes() < 10) {
+			  bookMin = "0" + dateBook.getMinutes();
+		  }
+		  else {
+			  bookMin = dateBook.getMinutes();
+		  }
+		  if (dateBook.getSeconds() < 10) {
+			  bookSec = "0" + dateBook.getSeconds();
+		  }
+		  else {
+			  bookSec = dateBook.getSeconds();
+		  }
+		  var bookDate = curDate +"-"+curMonth+"-"+dateBook.getFullYear()+" "+bookHour+":"+bookMin+":"+bookSec;
+    	  
+    	  //slot time
+    	 var dateSlot = currentDate+" "+bookingTimeSlot;
     	  
     	  
-    	  var request = {"employeeId":empId,"employeeName":empName,"source":sourceSelected,"destination":destinationSelected,"dropPoint":dropPointSelected,"timeSlot":bookingTimeSlot};
+    	  var request = {"employeeId":empId,"employeeName":empName,"source":sourceSelected,"destination":destinationSelected,"dropPoint":dropPointSelected,"timeSlot":bookingTimeSlot,"slotDate":dateSlot,"bookingDate":bookDate};
     	  
     	  xhrBooking.open("POST","http://localhost:8080/user/booking/bookacab",true);
     	  xhrBooking.onreadystatechange=bookingResponse;
@@ -434,6 +578,7 @@
     	  xhrBooking.setRequestHeader("Content-Type", "application/json");
     	  
     	  xhrBooking.send(JSON.stringify(request));
+    	  
       }
       
       var bookedResponseObj;
