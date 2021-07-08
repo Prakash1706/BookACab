@@ -11,8 +11,6 @@
 
 /* -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
         
-        //Validate whether the User has already made booking or not
-        
         var empId = "2034";
     	var empName = "Prakash D";
     	
@@ -21,6 +19,8 @@
     	//setInterval('validateBooking()',10000); //for every 10000ms, validateBooking() gets invoked
     	
     	var validateXhr = new XMLHttpRequest();
+        
+        //Validate whether the User has already made booking or not
         
         function validateBooking(){
 	
@@ -34,16 +34,23 @@
 
 		function validationProcessResponse(){
 			
+			//Not made Booking already
+			
 			if(validateXhr.readyState == 4 && validateXhr.status == 200){
 				fetchSource();
 				fetchDestination();
 				// getTime();
 			}
 			
+			//Cab has been assigned
+			
 			if(validateXhr.readyState == 4 && validateXhr.status == 228){
 				
-				window.location.href = "cab-app-ongoingtrip.html";
+				var responseValidate = JSON.parse(validateXhr.responseText);
+				window.location.href = "cab-app-ongoingtrip.html?tripCabId="+responseValidate.tripCabId+"?bookingId="+responseValidate.bookingId;
 			}
+			
+			//Already booked - yet to get assigned to a cab
 			
 			if(validateXhr.readyState == 4 && validateXhr.status == 227){
 				
@@ -65,7 +72,30 @@
 			    document.querySelector('#dropPoint-opt').appendChild(dropOpt);
       	       
       	        var timeOpt = document.createElement('option');
-				timeOpt.innerText = validationResponse.timeSlot;
+      	        	var timeslot = validationResponse.timeSlot; //22:30:00
+        				var slotSplitted = timeslot.split(":"); //[22,30,00]
+        				slotHour = slotSplitted[0];
+        				if(slotHour<12){
+        					
+								if(slotHour==00){
+									timeOpt.innerText = "12"+":"+slotSplitted[1]+":"+slotSplitted[2]+" AM";
+								}
+								else{
+									timeOpt.innerText = slotHour+":"+slotSplitted[1]+":"+slotSplitted[2]+" AM";
+								}
+						}
+						else{
+								slotHour = slotHour-12;
+								if(slotHour==0){
+									timeOpt.innerText = "12"+":"+slotSplitted[1]+":"+slotSplitted[2]+" PM";
+								}
+								else if(slotHour < 10){
+									timeOpt.innerText = "0"+slotHour+":"+slotSplitted[1]+":"+slotSplitted[2]+" PM";
+								}
+								else{
+									timeOpt.innerText = slotHour+":"+slotSplitted[1]+":"+slotSplitted[2]+" PM";
+								}
+						}
 				timeOpt.selected = "selected";
 			    document.querySelector('#timeSlot-opt').appendChild(timeOpt);
       
@@ -83,7 +113,7 @@
 			
 		}
 		
-		
+		//Validation ends here
 /* -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/		
 
         //Fetches sources
@@ -390,7 +420,7 @@
 //			}
 			
 			var d = addDays(new Date(),1);
-			if((d.getDate()+1)<10){
+			if((d.getDate())<10){
 				if((d.getMonth()+1)<10){
 					currentDate = "0"+d.getDate() + "-" + "0"+(d.getMonth()+1) + "-" +d.getFullYear();
 				}
@@ -490,7 +520,7 @@
     	  document.getElementById("bookACab-btn").setAttribute('data-target','#confirmbooking');
       }
       
-     
+     //Booking confirmation pop up ends here
       
 /* -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
       
@@ -606,6 +636,8 @@
   		    }
   	}
   	
+  	//Booking made
+  	
 /* -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/  
       
       //Cancel the ride
@@ -624,7 +656,6 @@
     	  if(cancelXhr.readyState == 4 && cancelXhr.status == 200){
     		  
     		   window.location.href = "cab-application-masterpage.html";
-        	  
     	  }
     	  
     	  if(cancelXhr.readyState == 4 && cancelXhr.status == 228){
@@ -632,8 +663,6 @@
     	  alert("Cab has been assigned for you! You can't cancel your booking!");
     	  
     	  }
-    	  
-    	  
-    	  
       }
      
+	  //Cancelling the ride ends here

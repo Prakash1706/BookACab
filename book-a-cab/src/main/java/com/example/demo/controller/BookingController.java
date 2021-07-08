@@ -51,7 +51,23 @@ public class BookingController {
 	@PostMapping(path = "/bookacab")
 	public ResponseEntity<BookingRequest> storeBookingrequest(@RequestBody BookingRequestDTO request) throws Exception
 	{
-		//System.out.println(request);
+		//Validating whether the user has already made a booking or not
+		
+		BookingRequest requestValidate = this.bookingBl.validateBooking(request.getEmployeeId());
+		if(requestValidate!=null) 
+		{
+			if(requestValidate.getStatus().equals("pending"))
+			{
+				throw new Exception("Already booked");
+			}
+			else if(requestValidate.getStatus().equals("ongoing") || requestValidate.getStatus().equals("Assigned"))
+			{
+				throw new Exception("Already Booked and cab has been assigned");
+			}
+		}
+	
+		//Storing request
+		
 		BookingRequest savedRequest = this.bookingBl.storeBookingRequest(request);
 		
 		if(savedRequest == null) {
