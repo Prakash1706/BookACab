@@ -46,21 +46,21 @@ public class BookingBL {
 		BookingRequest bookingMade = this.bookingDl.storeBookingRequest(request);
 		
 		
-		if(bookingMade != null) {
-			
-			Employee employee = this.bookingDl.getEmployee(bookingMade.getEmployeeId());
-			
-			email.setFrom(fromMail);
-			email.setTo(employee.getEmployeeMail());
-			email.setSubject("Booking Confirmation");
-			email.setMessage("Hey! " +employee.getEmployeeName()+ "\n" + 
-	  					     " You've booked a cab \n" + 
-	  					     " From: " + bookingMade.getSource()+ "\n" + 
-	  					     " To: " +bookingMade.getDropPoint()+ "\n" + 
-	  					     " Time Slot: " +bookingMade.getTimeSlot()+ "\n" + 
-	  						 " at: " + bookingMade.getBookingTime());
-			sendEmail();
-		}
+//		if(bookingMade != null) {
+//			
+//			Employee employee = this.bookingDl.getEmployee(bookingMade.getEmployeeId());
+//			
+//			email.setFrom(fromMail);
+//			email.setTo(employee.getEmployeeMail());
+//			email.setSubject("Booking Confirmation");
+//			email.setMessage("Hey! " +employee.getEmployeeName()+ "\n" + 
+//	  					     " You've booked a cab \n" + 
+//	  					     " From: " + bookingMade.getSource()+ "\n" + 
+//	  					     " To: " +bookingMade.getDropPoint()+ "\n" + 
+//	  					     " Time Slot: " +bookingMade.getTimeSlot()+ "\n" + 
+//	  						 " at: " + bookingMade.getBookingTime());
+//			//sendEmail();
+//		}
 		
 		 return bookingMade;
 	}
@@ -94,20 +94,20 @@ public class BookingBL {
 	{
 		BookingRequest bookingCancelled = this.bookingDl.cancelTheRide(bookingId);
 		
-		if(bookingCancelled != null) {
-			
-			Employee employee = this.bookingDl.getEmployee(bookingCancelled.getEmployeeId());
-			
-			email.setFrom(fromMail);
-			email.setTo(employee.getEmployeeMail());
-			email.setSubject("Booking Cancelled");
-			email.setMessage("Hey! " +employee.getEmployeeName()+ "\n" + 
-	  					     " You've cancelled your booking \n" + 
-	  					     " From: " + bookingCancelled.getSource()+ "\n" + 
-	  					     " To: " +bookingCancelled.getDropPoint()+ "\n" + 
-	  					     " Time Slot: " + bookingCancelled.getTimeSlot());
-			sendEmail();
-		}
+//		if(bookingCancelled != null) {
+//			
+//			Employee employee = this.bookingDl.getEmployee(bookingCancelled.getEmployeeId());
+//			
+//			email.setFrom(fromMail);
+//			email.setTo(employee.getEmployeeMail());
+//			email.setSubject("Booking Cancelled");
+//			email.setMessage("Hey! " +employee.getEmployeeName()+ "\n" + 
+//	  					     " You've cancelled your booking \n" + 
+//	  					     " From: " + bookingCancelled.getSource()+ "\n" + 
+//	  					     " To: " +bookingCancelled.getDropPoint()+ "\n" + 
+//	  					     " Time Slot: " + bookingCancelled.getTimeSlot());
+//			//sendEmail();
+//		}
 		
 		return bookingCancelled;
 		

@@ -16,7 +16,7 @@
     	
     	var time;
     	
-    	//setInterval('validateBooking()',10000); //for every 10000ms, validateBooking() gets invoked
+    	setInterval('validateBooking()',20000); //for every 10000ms, validateBooking() gets invoked
     	
     	var validateXhr = new XMLHttpRequest();
         
@@ -632,7 +632,7 @@
   		    
   		    if(xhrBooking.readyState == 4 && xhrBooking.status == 231){
   		    
-  		    	alert("You can't book a Cab! You should make a booking 20 mins before the required time slot!");
+  		    	alert("You can't book a Cab! You should book 20 mins before the required time slot!");
   		    }
   	}
   	

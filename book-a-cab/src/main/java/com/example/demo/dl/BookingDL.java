@@ -83,7 +83,7 @@ public class BookingDL {
 		 }
 		
 		
-		BookingRequest book = new BookingRequest(request.getBookingId(), request.getEmployeeId() , request.getEmployeeName(), request.getSource() , request.getDestination(), request.getDropPoint() , request.getBookingTime(), request.getTimeSlot(), 0 , 0, null, null, null, null, "pending", "user", LocalDate.now(), "user", LocalDate.now(), 0);
+		BookingRequest book = new BookingRequest(request.getBookingId(), request.getEmployeeId() , request.getEmployeeName(), request.getSource() , request.getDestination(), request.getDropPoint() , request.getBookingTime(), request.getTimeSlot(), 0 , 0, null, null, null, null, "Booked", request.getEmployeeName(), LocalDate.now(), request.getEmployeeName(), LocalDate.now(), 0);
 		
 		BookingRequest booking =  this.bookingRepo.save(book);
 		
@@ -135,7 +135,7 @@ public class BookingDL {
 				return null;
 			}
 			
-			cancelReq.setStatus("cancelled");
+			cancelReq.setStatus("Cancelled");
 		}
 		
 		return this.bookingRepo.save(cancelReq);

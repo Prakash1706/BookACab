@@ -10,6 +10,6 @@ import com.example.demo.entity.BookingRequest;
 public interface BookingRepository extends MongoRepository<BookingRequest, Long> {
 
 	
-	@Query(value = "{employeeId:?0 , status:{$nin:[null , cancelled , reached , noshow ]}}")
+	@Query(value = "{employeeId:?0 , status:{$nin:[null , Cancelled , Reached , Noshow ]}}")
 	BookingRequest findBookingRequestByEmployeeId(int id);
 }

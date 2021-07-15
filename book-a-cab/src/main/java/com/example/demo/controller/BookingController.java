@@ -56,11 +56,11 @@ public class BookingController {
 		BookingRequest requestValidate = this.bookingBl.validateBooking(request.getEmployeeId());
 		if(requestValidate!=null) 
 		{
-			if(requestValidate.getStatus().equals("pending"))
+			if(requestValidate.getStatus().equals("Booked"))
 			{
 				throw new Exception("Already booked");
 			}
-			else if(requestValidate.getStatus().equals("ongoing") || requestValidate.getStatus().equals("Assigned"))
+			else if(requestValidate.getStatus().equals("Ongoing") || requestValidate.getStatus().equals("Assigned"))
 			{
 				throw new Exception("Already Booked and cab has been assigned");
 			}
@@ -121,13 +121,13 @@ public class BookingController {
 		BookingRequest request = this.bookingBl.validateBooking(employeeId);
 		if(request!=null) 
 		{
-			if(request.getStatus().equals("pending"))
+			if(request.getStatus().equals("Booked"))
 			{
 				return ResponseEntity.status(CustomStatus.PENDING).body(request);
 			}
-			else if(request.getStatus().equals("ongoing") || request.getStatus().equals("Assigned"))
+			else if(request.getStatus().equals("Ongoing") || request.getStatus().equals("Assigned"))
 			{
-				return ResponseEntity.status(CustomStatus.INPROGRESS).body(null);
+				return ResponseEntity.status(CustomStatus.INPROGRESS).body(request);
 			}
 		}
 		
