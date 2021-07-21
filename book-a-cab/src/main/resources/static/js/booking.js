@@ -71,34 +71,12 @@
 				dropOpt.selected = "selected";
 			    document.querySelector('#dropPoint-opt').appendChild(dropOpt);
       	       
-      	        var timeOpt = document.createElement('option');
-      	        	var timeslot = validationResponse.timeSlot; //22:30:00
-        				var slotSplitted = timeslot.split(":"); //[22,30,00]
-        				slotHour = slotSplitted[0];
-        				if(slotHour<12){
-        					
-								if(slotHour==00){
-									timeOpt.innerText = "12"+":"+slotSplitted[1]+":"+slotSplitted[2]+" AM";
-								}
-								else{
-									timeOpt.innerText = slotHour+":"+slotSplitted[1]+":"+slotSplitted[2]+" AM";
-								}
-						}
-						else{
-								slotHour = slotHour-12;
-								if(slotHour==0){
-									timeOpt.innerText = "12"+":"+slotSplitted[1]+":"+slotSplitted[2]+" PM";
-								}
-								else if(slotHour < 10){
-									timeOpt.innerText = "0"+slotHour+":"+slotSplitted[1]+":"+slotSplitted[2]+" PM";
-								}
-								else{
-									timeOpt.innerText = slotHour+":"+slotSplitted[1]+":"+slotSplitted[2]+" PM";
-								}
-						}
+				var timeOpt = document.createElement('option');
+				var timeslot = validationResponse.timeSlot; //22:30:00
+				timeOpt.innerText = timeFormatTo12Hr(timeslot);
 				timeOpt.selected = "selected";
-			    document.querySelector('#timeSlot-opt').appendChild(timeOpt);
-      
+				document.querySelector('#timeSlot-opt').appendChild(timeOpt);
+
 				
 			   document.getElementById("screen-title").innerHTML = "Ongoing Trip";
   	           document.getElementById('clear-btn').style.display="none";
@@ -388,8 +366,9 @@
     	 var bookingTimeDiv = document.createElement('div');
     	  bookingTimeDiv.className = " col-md-12 col-12 float-start confirm-booking-content";
     	  time = time.split(" ");
-    	  var timeSplit = time[0].split(":");
-    	  var hours = timeSplit[0];
+    	  bookingTimeDiv.innerText = "Booking time: "+timeFormatTo12Hr(time[0]);
+    	  //var timeSplit = time[0].split(":");
+    	  //var hours = timeSplit[0];
     	  
     	   if (date.getDate() < 10) {
 			  slotDate = "0" + date.getDate();
@@ -464,34 +443,6 @@
 				}
 			}
 		  }
-    	  
-    	  
-    	  
-    	  if(hours<12){
-				if(hours>=10){
-					bookingTimeDiv.innerText = "Booking time: "+hours+":"+timeSplit[1]+":"+timeSplit[2]+" AM";
-				}
-				else{
-					if(hours==00){
-						bookingTimeDiv.innerText = "Booking time: "+"12"+":"+timeSplit[1]+":"+timeSplit[2]+" AM";
-					}
-					else{
-						bookingTimeDiv.innerText = "Booking time: "+"0"+hours+":"+timeSplit[1]+":"+timeSplit[2]+" AM";
-					}
-					
-				}
-			}
-			else{
-				hours = hours-12;
-				if(hours>=10){
-					bookingTimeDiv.innerText = "Booking time: "+hours+":"+timeSplit[1]+":"+timeSplit[2]+" PM";
-				}
-				else{
-					bookingTimeDiv.innerText = "Booking time: "+"0"+hours+":"+timeSplit[1]+":"+timeSplit[2]+" PM";
-				}
-				
-			}
-    	  
     	  var sourceDiv = document.createElement('div');
     	  sourceDiv.className = " col-md-12 col-12 float-start confirm-booking-content";
     	  sourceDiv.innerText = "Source: "+sourceSelected;
@@ -661,7 +612,7 @@
     	  if(cancelXhr.readyState == 4 && cancelXhr.status == 228){
     	  
     	  alert("Cab has been assigned for you! You can't cancel your booking!");
-    	  
+    	  window.location.reload();
     	  }
       }
      
